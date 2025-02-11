@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Game - Season 2</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container" style="background-color: white;">
+        <img src="logo.png" width="400px" height="150px">
+        <h1>TYPING GAME - SEASON 2</h1>
+        <p>Ketik ANGKA yang ditampilkan di bawah ini 
+            <br>(Perhatikan penulisan ANGKA dan TANDA BACA) :</p>
+        <div class="letter" id="letter">A</div>
+        <input type="text" id="input-box" class="input-box" maxlength="1" autofocus>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        const letters = '1234567890-_=+{[\|]};:,<>./?!@#$%^&*()`~';
+        let currentLetter = '';
+        let typedLetters = new Set(); // Menyimpan huruf yang sudah benar
+
+        const letterDisplay = document.getElementById('letter');
+        const inputBox = document.getElementById('input-box');
+        const resultDisplay = document.getElementById('result');
+
+        function setRandomLetter() {
+            if (typedLetters.size === letters.length) { // Jika semua huruf selesai
+                resultDisplay.textContent = 'Selamat Anda telah menyelesaikan Typing Game!';
+                resultDisplay.style.color = 'blue';
+                inputBox.disabled = true; // Mematikan input
+                return;
+            }
+
+            // Pilih huruf acak yang belum diketik
+            do {
+                currentLetter = letters.charAt(Math.floor(Math.random() * letters.length));
+            } while (typedLetters.has(currentLetter)); // Ulangi jika huruf sudah diketik
+
+            letterDisplay.textContent = currentLetter;
+            inputBox.value = '';
+            resultDisplay.textContent = '';
+        }
+
+        inputBox.addEventListener('input', () => {
+            const userInput = inputBox.value;
+            if (userInput === currentLetter) {
+                resultDisplay.textContent = 'Benar!';
+                resultDisplay.style.color = 'green';
+                typedLetters.add(currentLetter); // Tambahkan huruf yang benar ke set
+                setTimeout(setRandomLetter, 1000); // Ganti huruf setelah 1 detik
+            } else {
+                resultDisplay.textContent = 'Salah, coba lagi!';
+                resultDisplay.style.color = 'red';
+            }
+        });
+
+        setRandomLetter();
+    </script>
+</body>
+</html>
